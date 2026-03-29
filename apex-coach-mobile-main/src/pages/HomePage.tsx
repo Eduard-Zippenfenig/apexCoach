@@ -25,7 +25,7 @@ export default function HomePage() {
           const userRaw = localStorage.getItem("apexcoach_user");
           const user = userRaw ? JSON.parse(userRaw) : null;
           if (user?.id && user.id > 0) {
-            await fetch(`${API_BASE}/api/users/${user.id}/sessions`, {
+            await fetch(`${API_BASE}/users/${user.id}/sessions`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({

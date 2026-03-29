@@ -24,8 +24,8 @@ function MobileHeatmap() {
   useEffect(() => {
     const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
     Promise.all([
-      fetch(`${API_BASE}/api/track`).then(r => r.ok ? r.json() : Promise.reject("track failed")),
-      fetch(`${API_BASE}/api/heatmap`).then(r => r.ok ? r.json() : Promise.reject("heatmap failed")),
+      fetch(`${API_BASE}/track`).then(r => r.ok ? r.json() : Promise.reject("track failed")),
+      fetch(`${API_BASE}/analysis/time-loss-map`).then(r => r.ok ? r.json() : Promise.reject("heatmap failed")),
     ])
       .then(([t, h]) => { setTrack(t); setHeatmap(h); })
       .catch(e => setErr(String(e)))

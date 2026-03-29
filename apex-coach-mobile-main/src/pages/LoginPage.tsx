@@ -5,7 +5,7 @@ import { User, Mail, Lock, ChevronRight } from "lucide-react";
 
 type Tab = "signin" | "create";
 
-const API = "/api";
+const API = import.meta.env.VITE_API_BASE_URL || "";
 
 async function apiLogin(email: string, password: string) {
   const res = await fetch(`${API}/users/login`, {

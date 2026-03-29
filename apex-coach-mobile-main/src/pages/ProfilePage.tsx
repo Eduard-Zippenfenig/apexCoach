@@ -27,7 +27,7 @@ export default function ProfilePage() {
 
     // Fetch real session count from backend
     const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
-    fetch(`${API_BASE}/api/users/${u.id}/sessions`)
+    fetch(`${API_BASE}/users/${u.id}/sessions`)
       .then(r => r.ok ? r.json() : [])
       .then((sessions: unknown[]) => setSessionCount(sessions.length))
       .catch(() => setSessionCount(0));

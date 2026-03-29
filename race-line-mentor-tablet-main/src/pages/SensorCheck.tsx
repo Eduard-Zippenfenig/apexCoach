@@ -66,7 +66,8 @@ const SensorCheck = () => {
     // Telemetry / backend
     setTimeout(async () => {
       try {
-        const res = await fetch("/api/health", { signal: AbortSignal.timeout(5000) });
+        const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
+        const res = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(5000) });
         const data = await res.json();
         if (data.status === "ok") {
           update("telemetry", "connected", "Backend ready • All data files loaded • Low latency");

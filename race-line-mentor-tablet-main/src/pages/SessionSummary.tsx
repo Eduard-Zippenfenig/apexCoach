@@ -67,7 +67,8 @@ const SessionSummary = () => {
                 })),
                 coaching_report: data.coaching_report,
               };
-              fetch(`/api/users/${user.id}/sessions`, {
+              const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
+              fetch(`${API_BASE}/users/${user.id}/sessions`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(sessionPayload)

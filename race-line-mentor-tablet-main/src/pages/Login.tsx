@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { recentDrivers } from "@/data/mockData";
 
-const API = "/api";
+const API = import.meta.env.VITE_API_BASE_URL || "";
 
 async function apiLogin(email: string, password: string) {
   const res = await fetch(`${API}/users/login`, {

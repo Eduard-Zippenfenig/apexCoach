@@ -12,7 +12,7 @@ const SyncExport = () => {
     const MOBILE_APP_URL = import.meta.env.VITE_MOBILE_URL || "http://localhost:8081";
     
     // Build the base export URL
-    let exportUrl = `${API_BASE}/api/session/export`;
+    let exportUrl = `${API_BASE}/session/export`;
     
     // Build query parameters
     const params = new URLSearchParams();
