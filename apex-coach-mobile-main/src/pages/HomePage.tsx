@@ -48,6 +48,17 @@ export default function HomePage() {
     setSynced(true);
   }, []);
 
+  // Handle automatic import from URL query parameter
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const importUrl = params.get("import");
+    if (importUrl) {
+      handleScanComplete(importUrl);
+      // Clean up the URL to avoid re-triggering on refresh
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, [handleScanComplete]);
+
   return (
     <MobileLayout>
       <div className="flex flex-col gap-5 px-4 pt-6">

@@ -9,7 +9,7 @@ const SyncExport = () => {
   useEffect(() => {
     // Use the actual host IP so mobile can reach the backend on the same network
     const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
-    const MOBILE_APP_URL = import.meta.env.VITE_MOBILE_URL || "http://localhost:8081";
+    const MOBILE_APP_URL = import.meta.env.VITE_MOBILE_URL || (window.location.origin.includes("localhost") ? "http://localhost:8081" : window.location.origin.replace("tablet", "mobile").replace("-mentor", "-driver"));
     
     // Build the base export URL
     let exportUrl = `${API_BASE}/session/export`;
