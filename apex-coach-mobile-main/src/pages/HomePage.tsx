@@ -3,7 +3,7 @@ import { StatCard } from "@/components/StatCard";
 import { QrScanner } from "@/components/QrScanner";
 import { driver, sessions } from "@/data/mockData";
 import { useNavigate } from "react-router-dom";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { QrCode, ChevronRight, CheckCircle2, Clock, MapPin, Car } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
