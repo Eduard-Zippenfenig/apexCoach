@@ -6,6 +6,7 @@ import json
 import asyncio
 import logging
 import time
+import threading
 from contextlib import asynccontextmanager
 
 import numpy as np
@@ -123,7 +124,15 @@ async def lifespan(app: FastAPI):
         reassemble_files()
         users_db.init_db()
         users_db.seed_demo_data()
-        _load_session(GOOD_LAP_PATH, FAST_LAP_PATH, TRACK_JSON_PATH)
+        
+        # Run heavy loading in a background thread to prevent blocking FastAPI port binding
+        def background_load():
+            try:
+                _load_session(GOOD_LAP_PATH, FAST_LAP_PATH, TRACK_JSON_PATH)
+            except Exception as e:
+                logger.error(f"Failed to load session in background: {e}")
+                
+        threading.Thread(target=background_load, daemon=True).start()
     except Exception as e:
         logger.error(f"Failed to load session at startup: {e}")
         logger.info("Server starting without data — use POST /session/load")
