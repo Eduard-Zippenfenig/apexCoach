@@ -270,6 +270,10 @@ async def export_session(user_id: int = Query(None), carBrand: str = Query(None)
         
     return session_data
 
+@app.get("/")
+async def root():
+    return {"message": "ApexCoach Backend online — telemetry stream ready", "version": "1.0.0"}
+
 @app.get("/health")
 async def health():
     return {
