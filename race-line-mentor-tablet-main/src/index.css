@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+  :root {
+    --background: 0 0% 96%;
+    --foreground: 220 20% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 12%;
+
+    --primary: 145 80% 36%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 10% 92%;
+    --secondary-foreground: 220 15% 30%;
+
+    --muted: 220 10% 90%;
+    --muted-foreground: 220 10% 45%;
+
+    --accent: 210 100% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 85% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 10% 85%;
+    --input: 220 10% 85%;
+    --ring: 145 80% 36%;
+
+    --radius: 0.75rem;
+
+    /* Custom racing tokens */
+    --apex-green: 145 80% 36%;
+    --apex-red: 0 85% 50%;
+    --apex-yellow: 45 100% 45%;
+    --apex-blue: 210 100% 50%;
+    --apex-cyan: 185 100% 40%;
+    --apex-surface: 0 0% 100%;
+    --apex-surface-elevated: 220 10% 96%;
+    --apex-glow-green: 0 0% 0% / 0;
+    --apex-glow-red: 0 0% 0% / 0;
+
+    --font-display: 'Orbitron', sans-serif;
+    --font-body: 'Rajdhani', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 220 15% 30%;
+    --sidebar-primary: 145 80% 36%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 10% 92%;
+    --sidebar-accent-foreground: 220 15% 30%;
+    --sidebar-border: 220 10% 85%;
+    --sidebar-ring: 145 80% 36%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+}
+
+@layer components {
+  .apex-glow-green {
+    box-shadow: 0 0 20px hsl(var(--apex-green) / 0.3), 0 0 60px hsl(var(--apex-green) / 0.1);
+  }
+
+  .apex-glow-red {
+    box-shadow: 0 0 20px hsl(var(--apex-red) / 0.3), 0 0 60px hsl(var(--apex-red) / 0.1);
+  }
+
+  .apex-glow-blue {
+    box-shadow: 0 0 20px hsl(var(--apex-blue) / 0.3), 0 0 60px hsl(var(--apex-blue) / 0.1);
+  }
+
+  .apex-glow-yellow {
+    box-shadow: 0 0 20px hsl(var(--apex-yellow) / 0.3), 0 0 60px hsl(var(--apex-yellow) / 0.1);
+  }
+
+  .apex-card {
+    @apply bg-card border border-border rounded-lg;
+    backdrop-filter: blur(12px);
+  }
+
+  .apex-text-glow-green {
+    text-shadow: 0 0 20px hsl(var(--apex-green) / 0.5);
+  }
+
+  .apex-text-glow-red {
+    text-shadow: 0 0 20px hsl(var(--apex-red) / 0.5);
+  }
+
+  .apex-text-glow-blue {
+    text-shadow: 0 0 20px hsl(var(--apex-blue) / 0.5);
+  }
+
+  .apex-metric {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .apex-heading {
+    font-family: var(--font-display);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .apex-btn-primary {
+    @apply bg-primary text-primary-foreground font-semibold px-8 py-4 rounded-lg text-lg;
+    font-family: var(--font-display);
+    letter-spacing: 0.05em;
+    transition: all 0.2s ease;
+  }
+
+  .apex-btn-primary:hover {
+    box-shadow: 0 0 30px hsl(var(--apex-green) / 0.4);
+    transform: translateY(-1px);
+  }
+
+  .apex-btn-secondary {
+    @apply bg-secondary text-secondary-foreground font-medium px-6 py-3 rounded-lg border border-border;
+    font-family: var(--font-body);
+    transition: all 0.2s ease;
+  }
+
+  .apex-btn-secondary:hover {
+    @apply bg-muted;
+  }
+
+  .apex-status-green {
+    @apply text-primary;
+    text-shadow: 0 0 10px hsl(var(--apex-green) / 0.5);
+  }
+
+  .apex-status-red {
+    @apply text-destructive;
+    text-shadow: 0 0 10px hsl(var(--apex-red) / 0.5);
+  }
+
+  .apex-status-yellow {
+    color: hsl(var(--apex-yellow));
+    text-shadow: 0 0 10px hsl(var(--apex-yellow) / 0.5);
+  }
+
+  .apex-status-blue {
+    @apply text-accent;
+    text-shadow: 0 0 10px hsl(var(--apex-blue) / 0.5);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes race-line {
+  from { stroke-dashoffset: 1000; }
+  to { stroke-dashoffset: 0; }
+}

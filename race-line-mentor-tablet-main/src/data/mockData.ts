@@ -1,0 +1,137 @@
+export const tracks = [
+  {
+    id: "yas-marina",
+    name: "Yas Marina Circuit",
+    city: "Abu Dhabi",
+    country: "UAE",
+    length: "5.281 km",
+    turns: 21,
+    difficulty: "Advanced",
+    available: true,
+    featured: true,
+  },
+  {
+    id: "monza",
+    name: "Autodromo di Monza",
+    city: "Monza",
+    country: "Italy",
+    length: "5.793 km",
+    turns: 11,
+    difficulty: "Intermediate",
+    available: false,
+    featured: false,
+  },
+  {
+    id: "spa",
+    name: "Circuit de Spa-Francorchamps",
+    city: "Stavelot",
+    country: "Belgium",
+    length: "7.004 km",
+    turns: 19,
+    difficulty: "Expert",
+    available: false,
+    featured: false,
+  },
+  {
+    id: "silverstone",
+    name: "Silverstone Circuit",
+    city: "Silverstone",
+    country: "UK",
+    length: "5.891 km",
+    turns: 18,
+    difficulty: "Advanced",
+    available: false,
+    featured: false,
+  },
+];
+
+export const mockSession = {
+  driver: "Alex Mercer",
+  track: "Yas Marina Circuit",
+  car: "BMW M2 Track",
+  tyres: "Semi-slick",
+  mode: "Push" as const,
+  experience: "Intermediate" as const,
+  bestLap: "1:21.4",
+  referenceLap: "1:14.8",
+  totalLaps: 5,
+  consistency: 82,
+  brakingScore: 71,
+  exitScore: 64,
+  smoothness: 78,
+  date: "2026-03-28",
+  time: "14:32",
+  avgLap: "1:24.1",
+  strengths: [
+    "High-speed sweeper commitment",
+    "Consistent braking pressure",
+    "Smooth steering inputs",
+  ],
+  improvements: [
+    "Earlier braking point recognition",
+    "Corner exit throttle application",
+    "Trail braking technique",
+  ],
+  laps: [
+    { lap: 1, time: "1:28.3", delta: "+13.5", sectors: ["32.1", "28.4", "27.8"] },
+    { lap: 2, time: "1:24.7", delta: "+9.9", sectors: ["30.8", "27.2", "26.7"] },
+    { lap: 3, time: "1:22.9", delta: "+8.1", sectors: ["29.9", "26.8", "26.2"] },
+    { lap: 4, time: "1:21.4", delta: "+6.6", sectors: ["29.2", "26.3", "25.9"] },
+    { lap: 5, time: "1:23.1", delta: "+8.3", sectors: ["29.7", "26.9", "26.5"] },
+  ],
+  sectors: [
+    { name: "Sector 1", best: "29.2", ref: "26.8", delta: "+2.4", rating: "weak" },
+    { name: "Sector 2", best: "26.3", ref: "24.1", delta: "+2.2", rating: "average" },
+    { name: "Sector 3", best: "25.9", ref: "23.9", delta: "+2.0", rating: "strong" },
+  ],
+  corners: [
+    { name: "T1 - Left Hairpin", entry: 142, apex: 68, exit: 95, brakeTiming: "Early", timeLost: 0.8, comment: "Braking 15m too early. Carry more speed." },
+    { name: "T5 - Chicane", entry: 178, apex: 92, exit: 124, brakeTiming: "Good", timeLost: 0.3, comment: "Good entry, slightly early throttle." },
+    { name: "T7 - Long Right", entry: 195, apex: 155, exit: 172, brakeTiming: "Late", timeLost: -0.1, comment: "Excellent commitment. Maintain this." },
+    { name: "T11 - Hairpin", entry: 156, apex: 58, exit: 88, brakeTiming: "Early", timeLost: 1.2, comment: "Major time loss. Trail brake deeper." },
+    { name: "T14 - Fast Left", entry: 212, apex: 188, exit: 201, brakeTiming: "Good", timeLost: 0.2, comment: "Solid line. Slightly more exit speed possible." },
+    { name: "T17 - Chicane Complex", entry: 168, apex: 78, exit: 112, brakeTiming: "Early", timeLost: 0.9, comment: "Hesitant entry. Commit to later braking." },
+  ],
+};
+
+export const liveState = {
+  speed: 142,
+  maxSpeed: 280,
+  delta: "+1.82",
+  sector: 2,
+  lapTime: "0:48.3",
+  lap: 4,
+  totalLaps: "-",
+  cue: "Brake later",
+  cueType: "yellow" as const,
+  audioCoach: true,
+  voiceStyle: "Calm" as const,
+  mode: "Push" as const,
+  gps: true,
+  imu: true,
+  stream: true,
+  referencePace: "1:14.8",
+  confidence: 78,
+};
+
+export const coachingCues = [
+  { text: "Brake now", type: "red" as const },
+  { text: "Brake later", type: "yellow" as const },
+  { text: "Turn in later", type: "yellow" as const },
+  { text: "Too much entry speed", type: "red" as const },
+  { text: "Earlier throttle", type: "green" as const },
+  { text: "Good exit", type: "green" as const },
+  { text: "Smooth steering", type: "green" as const },
+  { text: "Apex missed", type: "red" as const },
+  { text: "Hold line", type: "blue" as const },
+  { text: "Prepare to brake", type: "yellow" as const },
+];
+
+export const recentDrivers = [
+  { name: "Alex Mercer", avatar: "AM", lastSession: "Today" },
+  { name: "Sarah Chen", avatar: "SC", lastSession: "Yesterday" },
+  { name: "Marco Rossi", avatar: "MR", lastSession: "2 days ago" },
+];
+
+// Yas Marina simplified SVG path
+export const yasMarinaSvgPath = "M 150 50 C 180 50 200 60 220 80 C 240 100 250 130 240 160 C 230 190 200 210 180 230 C 160 250 150 270 160 290 C 170 310 190 320 210 310 C 230 300 240 280 250 260 C 260 240 280 230 300 240 C 320 250 330 270 320 290 C 310 310 290 330 260 340 C 230 350 200 340 180 320 C 160 300 140 270 130 240 C 120 210 100 190 80 180 C 60 170 50 150 60 130 C 70 110 90 100 110 90 C 130 80 140 60 150 50 Z";

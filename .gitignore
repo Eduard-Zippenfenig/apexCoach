@@ -1,0 +1,23 @@
+# Node modules
+node_modules/
+dist/
+.env
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+users.db
+
+# OS files
+.DS_Store
+
+# Large Archives (Redundant)
+hackathon copy.tar.xz
+Archive.zip
+hackathon copy/
+apexcoach-frontend/
+
+# Assets (Originals already integrated)
+Gemini_Generated_Image_h9p9tgh9p9tgh9p9 copy.png
+image.png

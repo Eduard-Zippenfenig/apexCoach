@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"\\\\.tsx?$|^d\")",
+      "Bash(find '/Users/eduard-zippenfenig/Desktop/hackathon2 copy' -name .env* -o -name *env* -type f)",
+      "Bash(grep -E \"\\\\.py$\")",
+      "Bash(node_modules/.bin/tsc --noEmit)",
+      "Bash(bun --version)",
+      "Bash(for f:*)",
+      "Bash(do basename:*)",
+      "Bash(done)",
+      "Bash(npm install:*)",
+      "Bash(pip3 install:*)",
+      "Bash(curl -s \"http://localhost:3002/api/health\")",
+      "Bash(curl -s \"http://localhost:3001/api/health\")",
+      "Bash(npx tsc:*)",
+      "Bash(lsof -ti:8080 -ti:8081 -ti:8000)",
+      "Bash(lsof -i:8000 -i:8080 -i:8081)",
+      "Bash(curl -s http://localhost:8080 -o /dev/null -w \"%{http_code}\")",
+      "Bash(curl -s http://localhost:8081 -o /dev/null -w \"%{http_code}\")",
+      "Bash(curl -s http://localhost:8000/health -o /dev/null -w \"%{http_code}\")"
+    ]
+  }
+}

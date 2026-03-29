@@ -1,0 +1,107 @@
+ApexCoach Backend — Technical Overview
+=======================================
+
+What it does
+------------
+
+ApexCoach compares a driver's lap (the "good lap") against a fast reference lap at Yas Marina
+Circuit. It reads real ROS2 telemetry from MCAP files, aligns both laps spatially by track
+distance, and produces two outputs: a live coaching stream (frame-by-frame cues as the lap
+replays) and a post-session analysis (corner-by-corner time loss breakdown with a natural
+language report).
+
+
+Data pipeline
+-------------
+
+MCAP files -> parse -> enrich with track distance -> extract laps
+    -> resample to 1 m grid -> detect corners -> analyse -> serve via API
+
+Both MCAP files start mid-lap (~1830 m into the circuit), so the pipeline detects the
+start/finish crossing and uses only the continuous post-reset portion of each file (~2234 m
+of the 2451 m lap).
+
+
+Files
+-----
+
+parse_mcap.py
+    Reads /constructor0/state_estimation messages from a ROS2 MCAP bag using
+    mcap-ros2-support. Extracts position (x_m, y_m), velocity (vx_mps, vy_mps), throttle
+    (gas), steering (delta_wheel_rad), lateral acceleration (ay_mps2), gear, and RPM. Brake
+    pressure is stored in Pascals in the raw data (0-3.7 MPa); the parser normalises it to
+    0-1. Returns a sorted list of TelemetryFrame dataclasses.
+
+track.py
+    Loads yas_marina_bnd.json (left/right border point clouds). Computes the centerline as
+    the midpoint between borders, then a cumulative arc-length array giving each centerline
+    point a lap_distance_m value. project_to_track() finds the nearest centerline point to
+    any (x, y) position and returns the lap distance plus a signed cross-track error
+    (positive = left of centerline).
+
+aligner.py
+    Detects lap boundaries by finding where lap_distance_m wraps from near-maximum back to
+    zero. Extracts the post-reset portion of each file as the usable lap. resample_lap()
+    interpolates all channels (speed, throttle, brake, steering, position, cross-track,
+    lateral g) onto a uniform 1 m distance grid using scipy.interp1d. align_laps() sets the
+    grid length to the minimum of both laps' coverage so the arrays are always the same
+    length.
+
+segments.py
+    Labels each grid point as straight, braking, corner, or acceleration using the reference
+    lap's smoothed lateral acceleration (ay_mps2) and brake signal. Lateral acceleration
+    takes priority over braking to correctly handle trail-braking corners. Consecutive
+    same-label points are merged into segments; those shorter than 20 m are dropped as
+    noise. Corner segments are named Turn 1, Turn 2, ... in lap-distance order.
+
+live_coach.py
+    Given the car's current position and state, looks up the reference values at the same
+    track distance and computes deltas. Applies a fixed priority order to pick one cue per
+    frame:
+      1. Braking  — ref is braking ahead but user is not -> BRAKE_LATER
+      2. Speed    — more than 3 kph below reference -> CARRY_MORE_SPEED
+      3. Throttle — throttle more than 15% below reference on exit -> THROTTLE_EARLIER
+      4. Line     — cross-track deviation > 1.5 m from reference -> LINE_TOO_WIDE/TIGHT
+      5. On target -> ON_TARGET / GOOD_EXIT
+    Each cue has a severity (INFO / WARN / ALERT) and both a short HUD message (<=4 words)
+    and a spoken audio message.
+
+post_analysis.py
+    Iterates over every detected corner segment. For each corner it finds: entry speed
+    (10 m in), apex (minimum speed point), exit speed (10 m before end), brake start
+    distance (searching backwards from apex), and throttle pickup distance (first throttle
+    > 0.5 after apex). Time loss is computed via trapezoidal integration of
+    (1/v_user - 1/v_ref) * ds — a physics-based estimate rather than a heuristic. Corners
+    are ranked by time loss and the top 3 become improvement targets. Overall scores
+    (braking, throttle, line, smoothness) are normalised 0-100 metrics derived from the
+    mean deltas across all corners.
+
+report_generator.py
+    Generates the natural language coaching report. Tries the Claude API first
+    (claude-sonnet-4-20250514), sending a structured JSON prompt with all corner data and
+    the requested driver level. If the API is unavailable or the key is not set, falls back
+    to a template system with pre-written strings for each (issue_type, driver_level)
+    combination, covering four driver levels (beginner / intermediate / advanced / pro) and
+    five issue types (early braking, slow apex, late throttle, poor line, good).
+
+models.py
+    Shared dataclasses: TelemetryFrame, CornerAnalysis, PostAnalysisResult.
+
+config.py
+    All file paths, coaching thresholds (speed/brake/throttle/line INFO/WARN/ALERT cutoffs),
+    segment detection parameters, and the Anthropic model name in one place.
+
+main.py
+    FastAPI application. On startup (via lifespan) it runs the full pipeline — parse both
+    files, enrich, extract laps, resample, detect segments, run post analysis — and caches
+    everything in a module-level _state dict. Endpoints:
+
+    GET  /health              Server and data load status
+    POST /session/load        Re-run the pipeline with custom file paths
+    GET  /track               Full track geometry + detected segments
+    GET  /reference/trace     Reference lap resampled trace
+    GET  /user/trace          User lap resampled trace
+    GET  /live/stream         SSE stream replaying the user lap with live cues
+    GET  /analysis/post       Full post-session analysis + coaching report
+    GET  /analysis/speed-trace    Speed/throttle/brake comparison on shared distance axis
+    GET  /analysis/time-loss-map  Per-metre time loss with XY coordinates for heatmap
