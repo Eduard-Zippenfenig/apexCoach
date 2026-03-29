@@ -245,7 +245,11 @@ def _compute_time_loss(u_speed_ms, r_speed_ms, dist_arr):
     u_safe = np.maximum(u_speed_ms, 0.5)
     r_safe = np.maximum(r_speed_ms, 0.5)
     dt = 1.0 / u_safe - 1.0 / r_safe
-    return float(np.trapz(dt, dist_arr))
+    # Use trapezoid if available (Numpy 2.0+), fall back to trapz (Numpy 1.x)
+    trapz_func = getattr(np, 'trapezoid', getattr(np, 'trapz', None))
+    if trapz_func is None:
+        raise AttributeError("No trapezoidal integration function found in numpy")
+    return float(trapz_func(dt, dist_arr))
 
 
 def _compute_score(deltas, norm):
